@@ -1,6 +1,8 @@
 [package]
-name = "tuber-window-sdl2"
+name = "tuber_window_sdl2"
 version = "0.1.0"
 authors = ["Clément SIBILLE <claymeuns@protonmail.com>"]
 
 [dependencies]
+tuber = { git = "https://github.com/Lisible/tuber" }
+sdl2 = "0.32"
