@@ -31,7 +31,7 @@ use tuber_window_sdl2::SDLWindow;
 
 
 fn main() {
-    let mut window = SDLWindow::create("ExampleWindow", 800u32, 600u32).unwrap();
+    let mut window = SDLWindow::new("ExampleWindow", 800u32, 600u32).unwrap();
 
     loop {
         let event = window.poll_event();

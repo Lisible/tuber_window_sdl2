@@ -33,7 +33,7 @@ pub struct SDLWindow {
 }
 
 impl SDLWindow {
-    pub fn create(title: &str, width: u32, height: u32) -> Result<SDLWindow, String> {
+    pub fn new(title: &str, width: u32, height: u32) -> Result<SDLWindow, String> {
         let sdl_context = sdl2::init()?;
         let video_subsystem = sdl_context.video()?;
         let window = video_subsystem.window(title, width, height).build();
