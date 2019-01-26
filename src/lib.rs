@@ -25,7 +25,11 @@
 extern crate tuber;
 extern crate sdl2;
 
-use tuber::window::{ Window, WindowEvent };
+use sdl2::event::WindowEvent;
+use sdl2::mouse::MouseButton as SDL2MouseButton;
+use sdl2::keyboard::Keycode as SDL2Key;
+use tuber::window::Window;
+use tuber::input::{Input, keyboard, mouse};
 
 pub struct SDLWindow {
     sdl_context: sdl2::Sdl,
@@ -59,17 +63,76 @@ impl Window for SDLWindow {
         self.window.hide();
     }
 
-    fn poll_event(&mut self) -> WindowEvent {
+    fn poll_event(&mut self) -> Input {
         use sdl2::event::Event;
 
         let mut event_pump = self.sdl_context.event_pump().unwrap();
         for event in event_pump.poll_iter() {
             return match event {
-                Event::Quit {..} => WindowEvent::Close,
-                _ => WindowEvent::None
+                Event::Quit {..} => Input::Close,
+                Event::Window {win_event: WindowEvent::Resized(width, height), ..} =>
+                    Input::Resize(width as u32, height as u32),
+                Event::KeyDown { keycode: Some(key), .. } =>
+                    Input::KeyDown(sdl_key_to_tuber_key(key)),
+                Event::KeyUp { keycode: Some(key), .. } =>
+                    Input::KeyUp(sdl_key_to_tuber_key(key)),
+                Event::MouseButtonDown { mouse_btn: button, .. } =>
+                    Input::MouseDown(sdl_mouse_button_to_tuber_mouse_button(button)),
+                Event::MouseButtonUp { mouse_btn: button, .. } =>
+                    Input::MouseUp(sdl_mouse_button_to_tuber_mouse_button(button)),
+
+                _ => Input::None
             }
         }
 
-        WindowEvent::None
+        Input::None
+    }
+}
+
+fn sdl_key_to_tuber_key(key: SDL2Key) -> keyboard::Key {
+    match key {
+        SDL2Key::A => keyboard::Key::A,
+        SDL2Key::B => keyboard::Key::B,
+        SDL2Key::C => keyboard::Key::C,
+        SDL2Key::D => keyboard::Key::D,
+        SDL2Key::E => keyboard::Key::E,
+        SDL2Key::F => keyboard::Key::F,
+        SDL2Key::G => keyboard::Key::G,
+        SDL2Key::H => keyboard::Key::H,
+        SDL2Key::I => keyboard::Key::I,
+        SDL2Key::J => keyboard::Key::J,
+        SDL2Key::K => keyboard::Key::K,
+        SDL2Key::L => keyboard::Key::L,
+        SDL2Key::M => keyboard::Key::M,
+        SDL2Key::N => keyboard::Key::N,
+        SDL2Key::O => keyboard::Key::O,
+        SDL2Key::P => keyboard::Key::P,
+        SDL2Key::Q => keyboard::Key::Q,
+        SDL2Key::R => keyboard::Key::R,
+        SDL2Key::S => keyboard::Key::S,
+        SDL2Key::T => keyboard::Key::T,
+        SDL2Key::U => keyboard::Key::U,
+        SDL2Key::V => keyboard::Key::V,
+        SDL2Key::W => keyboard::Key::W,
+        SDL2Key::X => keyboard::Key::X,
+        SDL2Key::Y => keyboard::Key::Y,
+        SDL2Key::Z => keyboard::Key::Z,
+        SDL2Key::Return => keyboard::Key::Return,
+        SDL2Key::KpEnter => keyboard::Key::Enter,
+        SDL2Key::LShift => keyboard::Key::LShift,
+        SDL2Key::RShift => keyboard::Key::RShift,
+        SDL2Key::LCtrl => keyboard::Key::LControl,
+        SDL2Key::RCtrl => keyboard::Key::RControl,
+        SDL2Key::Escape => keyboard::Key::Escape,
+        _ => keyboard::Key::Unknown,
+    }
+}
+
+fn sdl_mouse_button_to_tuber_mouse_button(button: SDL2MouseButton) -> mouse::Button {
+    match button {
+        SDL2MouseButton::Left => mouse::Button::Left,
+        SDL2MouseButton::Right => mouse::Button::Right,
+        SDL2MouseButton::Middle => mouse::Button::Middle,
+        _ => mouse::Button::Unknown,
     }
 }

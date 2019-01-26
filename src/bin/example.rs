@@ -26,7 +26,7 @@ extern crate tuber_window_sdl2;
 extern crate tuber;
 
 use tuber::window::Window;
-use tuber::window::WindowEvent;
+use tuber::input::Input;
 use tuber_window_sdl2::SDLWindow;
 
 
@@ -36,7 +36,7 @@ fn main() {
     loop {
         let event = window.poll_event();
 
-        if let WindowEvent::Close = event {
+        if let Input::Close = event {
             break;
         }
     }
