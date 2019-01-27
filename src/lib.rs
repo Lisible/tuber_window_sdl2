@@ -33,20 +33,23 @@ use tuber::input::{Input, keyboard, mouse};
 
 pub struct SDLWindow {
     sdl_context: sdl2::Sdl,
-    window: sdl2::video::Window,
+    window: sdl2::video::Window
 }
 
 impl SDLWindow {
     pub fn new(title: &str, width: u32, height: u32) -> Result<SDLWindow, String> {
         let sdl_context = sdl2::init()?;
         let video_subsystem = sdl_context.video()?;
-        let window = video_subsystem.window(title, width, height).build();
+        let window = video_subsystem.window(title, width, height).opengl().build();
         let window = match window {
             Ok(window) => window,
             Err(error) => {
                 return Err(error.to_string())
             }
         };
+
+        // Creating OpenGL context
+        window.gl_create_context()?;
 
         Ok(SDLWindow {
             sdl_context,
@@ -86,6 +89,10 @@ impl Window for SDLWindow {
         }
 
         Input::None
+    }
+
+    fn set_current_graphics_context(&self) {
+       self.window.gl_set_context_to_current().unwrap();
     }
 }
 
