@@ -92,7 +92,9 @@ impl Window for SDLWindow {
     }
 
     fn set_current_graphics_context(&self) {
-       self.window.gl_set_context_to_current().unwrap();
+        if let Err(x) = self.window.gl_set_context_to_current() {
+            eprintln!("{}", x); 
+        }
     }
 }
 
