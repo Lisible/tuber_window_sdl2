@@ -99,6 +99,10 @@ impl Window for SDLWindow {
             eprintln!("{}", x); 
         }
     }
+
+    fn display(&mut self) {
+        self.window.gl_swap_window();
+    }
 }
 
 fn sdl_key_to_tuber_key(key: SDL2Key) -> keyboard::Key {
