@@ -34,7 +34,8 @@ use tuber::input::{Input, keyboard, mouse};
 
 pub struct SDLWindow {
     sdl_context: sdl2::Sdl,
-    window: sdl2::video::Window
+    window: sdl2::video::Window,
+    _gl_context: sdl2::video::GLContext
 }
 
 impl SDLWindow {
@@ -52,11 +53,12 @@ impl SDLWindow {
         gl::load_with(|s| video_subsystem.gl_get_proc_address(s) as *const std::os::raw::c_void);
 
         // Creating OpenGL context
-        window.gl_create_context()?;
+        let _gl_context = window.gl_create_context()?;
 
         Ok(SDLWindow {
             sdl_context,
-            window
+            window,
+            _gl_context
         })
     }
 }
