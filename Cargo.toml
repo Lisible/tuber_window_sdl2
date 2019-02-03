@@ -6,3 +6,4 @@ authors = ["Clément SIBILLE <claymeuns@protonmail.com>"]
 [dependencies]
 tuber = { git = "https://github.com/Lisible/tuber" }
 sdl2 = "0.32"
+gl = "0.6.0"

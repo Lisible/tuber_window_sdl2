@@ -24,6 +24,7 @@
 
 extern crate tuber;
 extern crate sdl2;
+extern crate gl;
 
 use sdl2::event::WindowEvent;
 use sdl2::mouse::MouseButton as SDL2MouseButton;
@@ -47,6 +48,8 @@ impl SDLWindow {
                 return Err(error.to_string())
             }
         };
+
+        gl::load_with(|s| video_subsystem.gl_get_proc_address(s) as *const std::os::raw::c_void);
 
         // Creating OpenGL context
         window.gl_create_context()?;
