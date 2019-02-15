@@ -27,6 +27,7 @@ extern crate tuber;
 
 use tuber::window::Window;
 use tuber::input::Input;
+use tuber::input::keyboard::Key;
 use tuber_window_sdl2::SDLWindow;
 
 
@@ -34,10 +35,13 @@ fn main() {
     let mut window = SDLWindow::new("ExampleWindow", 800u32, 600u32).unwrap();
 
     loop {
-        let event = window.poll_event();
+        let event = window.poll_input();
 
-        if let Input::Close = event {
-            break;
+        match event {
+           Some(Input::Close) |
+           Some(Input::KeyDown(Key::Escape)) => break,
+           Some(Input::KeyDown(_)) => println!("Test"),
+            _ => {}
         }
     }
 }

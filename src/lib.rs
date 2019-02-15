@@ -71,29 +71,29 @@ impl Window for SDLWindow {
         self.window.hide();
     }
 
-    fn poll_event(&mut self) -> Input {
+    fn poll_input(&mut self) -> Option<Input> {
         use sdl2::event::Event;
 
         let mut event_pump = self.sdl_context.event_pump().unwrap();
         for event in event_pump.poll_iter() {
             return match event {
-                Event::Quit {..} => Input::Close,
+                Event::Quit {..} => Some(Input::Close),
                 Event::Window {win_event: WindowEvent::Resized(width, height), ..} =>
-                    Input::Resize(width as u32, height as u32),
+                    Some(Input::Resize(width as u32, height as u32)),
                 Event::KeyDown { keycode: Some(key), .. } =>
-                    Input::KeyDown(sdl_key_to_tuber_key(key)),
+                    Some(Input::KeyDown(sdl_key_to_tuber_key(key))),
                 Event::KeyUp { keycode: Some(key), .. } =>
-                    Input::KeyUp(sdl_key_to_tuber_key(key)),
+                    Some(Input::KeyUp(sdl_key_to_tuber_key(key))),
                 Event::MouseButtonDown { mouse_btn: button, .. } =>
-                    Input::MouseDown(sdl_mouse_button_to_tuber_mouse_button(button)),
+                    Some(Input::MouseDown(sdl_mouse_button_to_tuber_mouse_button(button))),
                 Event::MouseButtonUp { mouse_btn: button, .. } =>
-                    Input::MouseUp(sdl_mouse_button_to_tuber_mouse_button(button)),
+                    Some(Input::MouseUp(sdl_mouse_button_to_tuber_mouse_button(button))),
 
-                _ => Input::None
+                _ => None
             }
         }
 
-        Input::None
+        None
     }
 
     fn set_current_graphics_context(&self) {
