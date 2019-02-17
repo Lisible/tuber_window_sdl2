@@ -25,6 +25,7 @@ use std::rc::Rc;
 use std::cell::RefCell;
 
 use sdl2::event::Event as SDLEvent;
+use sdl2::video::GLContext;
 
 use tuber::window::{Window, WindowEvent};
 
@@ -33,7 +34,8 @@ use crate::input::keyboard::SDLKey;
 
 pub struct SDLWindow {
     sdl_window: sdl2::video::Window,
-    sdl_event_pump: Rc<RefCell<sdl2::EventPump>>
+    sdl_event_pump: Rc<RefCell<sdl2::EventPump>>,
+    _gl_context: GLContext,
 }
 
 impl SDLWindow {
@@ -41,17 +43,27 @@ impl SDLWindow {
                sdl_event_pump: Rc<RefCell<sdl2::EventPump>>) -> SDLWindow {
         let sdl_window = sdl_video_subsystem.window("Untitled Window", 800, 600)
             .position_centered()
+            .opengl()
             .build()
             .expect("Window creation failed");
 
+        let _gl_context = sdl_window.gl_create_context()
+            .expect("GL context creation failed");
+
         SDLWindow {
             sdl_window,
-            sdl_event_pump
+            sdl_event_pump,
+            _gl_context
         }
     }
 }
 
 impl Window for SDLWindow {
+
+    fn display(&mut self) {
+        self.sdl_window.gl_swap_window();
+    }
+
     fn poll_event(&mut self) -> Option<WindowEvent> {
         if let Some(sdl_event) = self.sdl_event_pump.borrow_mut().poll_event() {
             return Some(match sdl_event {
